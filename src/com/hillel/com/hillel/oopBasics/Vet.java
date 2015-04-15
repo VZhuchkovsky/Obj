@@ -1,3 +1,5 @@
+package com.hillel.com.hillel.oopBasics;
+
 import java.util.Arrays;
 
 /**
@@ -10,20 +12,24 @@ public class Vet {
 
     public void registerCat(Cat cat) //static необходимо убрать
     {
-        vetList[registered] = cat;
-        registered++;
+        if(cat != null) {
+            vetList[registered] = cat;
+            registered++;
+        }
     }
 
     public void print()
     {
+
         System.out.println(Arrays.toString(vetList));
     }
+
     public void makeVaccine()
     {
         for (int i = 0; i < registered; i++)
         {
             Cat cat = vetList[i];
-            cat.acceptVaccine("SVG");
+            cat.acceptVaccine(Vaccine.BCG);
         }
     }
 }
