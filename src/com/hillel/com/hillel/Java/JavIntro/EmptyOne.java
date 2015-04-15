@@ -8,8 +8,6 @@ import com.hillel.com.hillel.oopBasics.Cat;
 public class EmptyOne {
     public static void Main(String[] params){
 
-
     }
-
 
 }

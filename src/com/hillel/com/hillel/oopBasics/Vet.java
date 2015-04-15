@@ -30,6 +30,7 @@ public class Vet {
         {
             Cat cat = vetList[i];
             cat.acceptVaccine(Vaccine.BCG);
+            cat.acceptVaccine(Vaccine.SOME_OTHER);
         }
     }
 }
