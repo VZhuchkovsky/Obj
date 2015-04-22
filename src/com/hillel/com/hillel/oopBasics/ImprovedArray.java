@@ -2,17 +2,18 @@ package com.hillel.com.hillel.oopBasics;
 
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Created by VZhuchkovsky on 17.04.2015.
  */
 public class ImprovedArray {
 
-    private String[] array = new String[1];
+    private Object[] array = new Object[1];
 
     private int counter = 0;
 
-    public void add(String value) {
+    public void add(Object value) {
         if (array.length == counter) {
             resize();
         }
@@ -20,7 +21,7 @@ public class ImprovedArray {
         counter++;
     }
 
-    public String get(int index) {
+    public Object get(int index) {
         if (index >= counter) {
             throw new IndexOutOfBoundsException("index: " + index + ", size:" + counter);
         }
