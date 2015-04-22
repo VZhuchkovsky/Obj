@@ -23,4 +23,9 @@ public class Rectangle extends Shape {
     public String toString() {
         return "Rectangle, " + a + "x" + b + " " + super.toString();
     }
+
+    @Override
+    public String getColor() {
+        return "White";
+    }
 }

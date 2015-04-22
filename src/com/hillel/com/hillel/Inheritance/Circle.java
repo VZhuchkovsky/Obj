@@ -21,4 +21,9 @@ public class Circle extends  Shape {
     public String toString() {
         return "Circle " + r + " " + super.toString(); //super points only on is super class
     }
+
+    @Override
+    public String getColor() {
+        return "Black";
+    }
 }

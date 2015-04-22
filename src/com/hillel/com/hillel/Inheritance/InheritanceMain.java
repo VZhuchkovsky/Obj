@@ -15,11 +15,21 @@ public class InheritanceMain {
 
         Rectangle rectangle = new Rectangle(10,5);
 
+        ArrayList<Colored> list = new ArrayList<Colored>();
+        list.add(circle);
+        list.add(rectangle);
+    }
+
+    public static void polymorphism() {
+        Circle circle = new Circle(10);
+
+        Rectangle rectangle = new Rectangle(10,5);
+
         ArrayList<Shape> list = new ArrayList<Shape>();
         list.add(circle);
         list.add(rectangle);
 
-       // printAreas(list);
+        // printAreas(list);
         print(list);
     }
 
