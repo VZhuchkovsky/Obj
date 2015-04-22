@@ -15,6 +15,8 @@ public class InheritanceMain {
 
         Rectangle rectangle = new Rectangle(10,5);
 
+        Colored c = circle;
+
         ArrayList<Colored> list = new ArrayList<Colored>();
         list.add(circle);
         list.add(rectangle);
