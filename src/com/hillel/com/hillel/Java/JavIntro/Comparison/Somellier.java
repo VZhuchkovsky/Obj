@@ -1,17 +1,70 @@
 package com.hillel.com.hillel.Java.JavIntro.Comparison;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by VZhuchkovsky on 29.04.2015.
  */
 public class Somellier {
-    public static void main(String[] args){
-        Vine bottle1 = new Vine (1995, 200);
-        Vine bottle2 = new Vine (1995, 100);
+    public static void main(String[] args) {
+
+        List<Vine> store = new ArrayList<>();
+        store.add(new Vine(1999, 200));
+        store.add(new Vine(1995, 250));
+        store.add(new Vine(1995, 240));
+        store.add(new Vine(1999, 200));
+        store.add(new ExpensiveVine(1965, 900));
+        store.add(new ExpensiveVine(1965, 900));
+        store.add(new CheapVine(2014, 50));
+        store.add(new CheapVine(2014, 50));
+        store.add(new CheapVine(2015, 50));
+        //store.add(new Object());   //can be possible if <Vine> will be deleted
+
+        //Vine bottle = (Vine) store.get(0);   //if <Vine> deleted
+
+
+        print(store);
+
+
+        Set<Vine> menu = new TreeSet<>();
+
+        menu.addAll(store);
+
+        System.out.println("Menu: ");
+        print(menu);
+
+        Set<Vine> orderedByPrice = new TreeSet<>(new OrderByPriceYear());
+
+        orderedByPrice.addAll(store);
+
+        System.out.println("Menu ordered by price: ");
+        print(orderedByPrice);
+    }
+
+    public static void print(Iterable<Vine> vines) {
+        for (Vine vine : vines) {
+            System.out.println(vine);
+        }
+    }
+
+
+    public static void printTaste(List<Vine> vines) {
+        Iterator<Vine> iterator = vines.iterator();
+
+        while (iterator.hasNext()) {
+            Vine vine = iterator.next();
+            System.out.println(vine.taste());
+        }
+
+        for (Vine vine : vines) {
+            System.out.println(vine.taste());
+        }
+    }
+
+
+    public static void oldStaf() {
+        Vine bottle1 = new Vine(1995, 200);
+        Vine bottle2 = new Vine(1995, 100);
         Integer i = 123;
 
 
@@ -31,7 +84,7 @@ public class Somellier {
 
         System.out.println(list);
 
-        Comparator<Vine> orderByPrice = new VineComparator();
+        Comparator<Vine> orderByPrice = new OrderByPriceYear();
 
         Collections.sort(list, orderByPrice);
 

@@ -29,17 +29,29 @@ public class Vine implements Comparable<Vine>{
         }
         Vine other = (Vine) obj;
 
-        return this.year == other.year;
+        return this.year == other.year && this.price == other.price;
 
 
 
     }
     @Override
     public int compareTo(Vine bottle2) {
-        return this.year -  bottle2.year;
+        int result = this.year -  bottle2.year;
+        if(result == 0){
+            result = this.price - bottle2.price;
+        }
+        return result;
     }
 
     public int getPrice() {
         return price;
+    }
+
+    public String taste(){
+        return "nothing special";
+    }
+
+    public int getYear() {
+        return year;
     }
 }
