@@ -16,21 +16,25 @@ public class JavaGroupMain {
         JavaGroup group = new JavaGroup(list);
 
 
-        try {
-            group.addGrade("Ivan", 5);
-        } catch (UnknownStudentException e) {
-            System.out.println(e);
-            throw e;
-        }
-        try{
-            group.addGrade("Nikolay",2);
-        } catch (UnknownStudentException e) {
-           e.printStackTrace(System.out);
-        }
+        addGrade("Ivan", 5, group);
+        addGrade("Dima", 5, group);
+        addGrade("Nikita", 5, group);
+        addGrade("Ivan", 2, group);
 
+        addGrade(null, 2, group);
+
+        group.addGrade("Dima", 5);
+
+        System.out.println("end");
+
+    }
+
+    private static void addGrade(String name, Integer grade, JavaGroup group) throws UnknownStudentException {
         try {
-            group.addGrade("Dima", 5);
-        } catch (UnknownStudentException e) {
+            group.addGrade(name, grade);
+        } catch (UnknownStudentException | GradeAlreadyExistException e) {
+            e.printStackTrace(System.out);
+        }catch (RuntimeException e){
             e.printStackTrace(System.out);
         }
     }

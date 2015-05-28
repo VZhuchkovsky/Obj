@@ -11,15 +11,22 @@ public class JavaGroup {
     private Map<String, Integer> namesToGrades = new HashMap<>();
 
     public JavaGroup(List<String> names) {
-        for(String name : names){
-            namesToGrades.put(name,null);
+        for (String name : names) {
+            namesToGrades.put(name, null);
         }
     }
 
     public void addGrade(String name, Integer grade) throws UnknownStudentException {
-        if(!namesToGrades.containsKey(name)){
+        if (!namesToGrades.containsKey(name)) {
             throw new UnknownStudentException("Unknown student " + name);
         }
-        namesToGrades.put(name,grade);
+        Integer existedGrade = namesToGrades.get(name);
+        if(existedGrade != null){
+            throw new GradeAlreadyExistException("Name: " + name + ", existed grade: " + existedGrade + ", new grade: " + grade);
+        }
+        if(name == null){
+            throw new NullPointerException("name is null");
+        }
+        namesToGrades.put(name, grade);
     }
 }
