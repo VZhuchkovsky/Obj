@@ -6,7 +6,7 @@ package com.hillel.com.hillel.advancedOOP.decorator;
 public class Arabica extends Beverage {
     @Override
     public int cost() {
-        return 100 + super.cost();
+        return 100 ;
     }
 
     @Override

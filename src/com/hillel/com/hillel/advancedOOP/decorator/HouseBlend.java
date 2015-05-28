@@ -6,7 +6,7 @@ package com.hillel.com.hillel.advancedOOP.decorator;
 public class HouseBlend extends Beverage {
     @Override
     public int cost() {
-        return 95 + super.cost();
+        return 95 ;
     }
 
     @Override
