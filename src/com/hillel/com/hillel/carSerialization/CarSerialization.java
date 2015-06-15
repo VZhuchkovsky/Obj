@@ -20,6 +20,8 @@ public class CarSerialization extends JFrame {
     private DefaultListModel listModel;
 
     public static void main(String[] args) {
+
+        //System.out.println(new File("asd.txt").getAbsolutePath());
         new CarSerialization();
     }
 
@@ -73,7 +75,8 @@ public class CarSerialization extends JFrame {
         saveItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("hillel/serializedCarList.dat"))) {
+                System.out.println(new File("asd.txt").getAbsolutePath());
+                try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("obj2/serializedCarList.dat"))) {
                     Object[] cars = listModel.toArray();
                     outputStream.writeObject(cars);
                 } catch (IOException e1) {
@@ -89,7 +92,7 @@ public class CarSerialization extends JFrame {
         loadItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("hillel/serializedCarList.dat"))) {
+                try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("obj2/serializedCarList.dat"))) {
                     Object[] cars = (Object[]) inputStream.readObject();
 
                     listModel.clear();
