@@ -10,6 +10,9 @@ public class Bucket {
     public void put() { //public synchronized void put()
         synchronized (this) {
             while (count == maxCount) {
+                if(Thread.currentThread().isInterrupted()){
+                    return;
+                }
                 try {
                     wait();
                 } catch (InterruptedException e) {
