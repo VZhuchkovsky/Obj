@@ -18,6 +18,7 @@ public class BankMain {
 
         bankier1.interrupt();
         bankier2.interrupt();
+
         try {
             bankier1.join();
         } catch (InterruptedException e) {}
