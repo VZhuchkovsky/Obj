@@ -4,12 +4,6 @@ package com.hillel.com.hillel.HomeTask.RectangleOOP;
  * Created by VZhuchkovsky on 25.06.2015.
  */
 public class RectangleOOP {
-    public static void main(String[] args) {
-        RectangleOOP rectangleOOP = new RectangleOOP(4,4);
-
-        System.out.println();
-    }
-
     public double length;
     public double width;
 
