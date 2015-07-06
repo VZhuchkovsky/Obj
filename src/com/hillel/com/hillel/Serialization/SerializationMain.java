@@ -36,7 +36,7 @@ public class SerializationMain {
 
     private static List<Car> load() {
         List<Car> cars = null;
-        try (ObjectInputStream outputStream = new ObjectInputStream(new FileInputStream("hillel/serializedCar.dat"))) {
+        try (ObjectInputStream outputStream = new ObjectInputStream(new FileInputStream("hillel.com.hillel/serializedCar.dat"))) {
             cars = (List<Car>) outputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -45,7 +45,7 @@ public class SerializationMain {
     }
 
     private static void save(List<Car> cars) {
-        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("hillel/serializedCar.dat"))) {
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("hillel.com.hillel/serializedCar.dat"))) {
             outputStream.writeObject(cars);
         } catch (IOException e) {
             e.printStackTrace();
