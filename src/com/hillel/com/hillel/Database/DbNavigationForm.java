@@ -1,6 +1,7 @@
 package com.hillel.com.hillel.Database;
 
-import sun.misc.IOUtils;
+
+import org.apache.commons.io.IOUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -83,7 +84,7 @@ if(imageBytes != null){
                 if(fileChooser.showDialog(null, "ok") == JFileChooser.APPROVE_OPTION){
                     File file = fileChooser.getSelectedFile();
                     try {
-                       imageBytes = IOUtils.toByteArray(new FileInputStream(file));
+                        imageBytes = IOUtils.toByteArray(new FileInputStream(file));
                     }catch(IOException e1){
                         JOptionPane.showMessageDialog(null, e1.getMessage(), "unable to load the element", JOptionPane.ERROR_MESSAGE);
 
