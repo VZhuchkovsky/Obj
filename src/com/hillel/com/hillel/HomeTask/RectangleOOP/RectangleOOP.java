@@ -11,12 +11,16 @@ public class RectangleOOP {
         this.length = l;
         this.width = w;
     }
-    public String toString(){
-        return "";
+
+    @Override
+    public String toString() {
+        return "RectangleOOP{" +
+                "length=" + length +
+                ", width=" + width +
+                '}';
     }
 
-
-    //RectangleOOP rectangle1 = new RectangleOOP(4,1);
+//RectangleOOP rectangle1 = new RectangleOOP(4,1);
     //RectangleOOP rectangle2 = new RectangleOOP(8,4);
     //RectangleOOP rectangle3 = new RectangleOOP(20,25);
 
