@@ -22,7 +22,7 @@ public class DatabaseMain {
 
         read(connection);
 
-        //update(connection, 34, "Mouse");
+        //updateCurrent(connection, 34, "Mouse");
         update(connection, 10, "Mouse' or ''='");
 
         //updateWithInjection(connection, 10, "Mouse' or ''='");
@@ -82,7 +82,7 @@ public class DatabaseMain {
             String name = resultSet.getString("name");
             String category = resultSet.getString("category");
             Integer price = resultSet.getInt("price");
-            Product product = new Product(name, category, price);
+            Product product = new Product(name, category, price, null);
             System.out.println(product);
         }
 

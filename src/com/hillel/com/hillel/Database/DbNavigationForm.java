@@ -20,7 +20,23 @@ import java.sql.*;
 /**
  * Created by MFarsikov on 02.07.2015.
  */
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+/**
+ * Created by MFarsikov on 02.07.2015.
+ */
 public class DbNavigationForm extends JFrame {
+    private final Dao<Product> productDb = new ProductDbDao();
     private JTextField nameField;
     private JTextField categoryField;
     private JTextField priceField;
@@ -32,23 +48,13 @@ public class DbNavigationForm extends JFrame {
     private JButton deleteButton;
     private JButton imageButton;
     private JLabel imageLabel;
-    private final ResultSet resultSet;
-    private Connection connection;
     private byte[] imageBytes;
 
-    public DbNavigationForm() throws SQLException {
-        System.setProperty("jdbc.drivers", "org.postgresql.Driver");
+    public DbNavigationForm() {
 
-        String connectionString = "jdbc:postgresql://localhost:5432/postgres";
 
-        connection = DriverManager.getConnection(connectionString, "postgres", "postgres");
-        String sql = "SELECT name, category, price FROM store";
-
-        Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        resultSet = statement.executeQuery(sql);
-
-        resultSet.next();
-        readFromResultSet();
+        Product product = productDb.getNext();
+        draw(product);
 
         initNextBtn();
         initPrevBtn();
@@ -57,7 +63,6 @@ public class DbNavigationForm extends JFrame {
         initCreateBtn();
         initDeleteBtn();
         initImageBtn();
-        drawImage();
 
         setContentPane(panel);
         pack();
@@ -65,56 +70,47 @@ public class DbNavigationForm extends JFrame {
         setVisible(true);
     }
 
-    private void drawImage() {
-if(imageBytes != null){
-    try {
-       BufferedImage image =  ImageIO.read(new ByteArrayInputStream(imageBytes));
-        imageLabel.setIcon(new ImageIcon(image));
-    } catch (IOException e) {
-        JOptionPane.showMessageDialog(null, e.getMessage(), "unable to draw the element", JOptionPane.ERROR_MESSAGE);
-    }
-}
-    }
-
     private void initImageBtn() {
         imageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileChooser = new JFileChooser();
-                if(fileChooser.showDialog(null, "ok") == JFileChooser.APPROVE_OPTION){
+                if (fileChooser.showDialog(null, "ok") == JFileChooser.APPROVE_OPTION) {
                     File file = fileChooser.getSelectedFile();
                     try {
                         imageBytes = IOUtils.toByteArray(new FileInputStream(file));
-                    }catch(IOException e1){
-                        JOptionPane.showMessageDialog(null, e1.getMessage(), "unable to load the element", JOptionPane.ERROR_MESSAGE);
-
+                        drawImage(imageBytes);
+                    } catch (IOException e1) {
+                        JOptionPane.showMessageDialog(null, e1.getMessage(), "unable to load image", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
         });
     }
 
+    private void drawImage(byte[] imageBytes) {
+        if (imageBytes != null) {
+            try {
+                BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageBytes));
+                imageLabel.setIcon(new ImageIcon(image));
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, e.getMessage(), "unable to draw image", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            imageLabel.setIcon(null);
+        }
+    }
+
     private void initDeleteBtn() {
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                  resultSet.deleteRow();
-                    if(resultSet.next()){
-                        readFromResultSet();
-                }else{
-                        if(resultSet.previous()){
-                            readFromResultSet();
-                        }else{
-                            nameField.setText("");
-                            categoryField.setText("");
-                            priceField.setText("");
-                        }
-                    }
-
-                } catch (SQLException e1) {
-                    JOptionPane.showMessageDialog(null, e1.getMessage(), "unable to delete the element", JOptionPane.ERROR_MESSAGE);
+                productDb.deleteCurrent();
+                Product product = productDb.getNext();
+                if (product == null) {
+                    product = productDb.getPrevious();
                 }
+                draw(product);
             }
         });
     }
@@ -123,36 +119,26 @@ if(imageBytes != null){
         createButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    resultSet.moveToInsertRow();
-                    updateResultSet();
-                    resultSet.insertRow();
-                    //resultSet.moveToCurrentRow();
-                    resultSet.last();
-                } catch (SQLException e1) {
-                    JOptionPane.showMessageDialog(null, e1.getMessage(), "unable to insert the element", JOptionPane.ERROR_MESSAGE);
-                }
+                Product product = readFromFields();
+                productDb.insert(product);
             }
         });
     }
 
-    private void updateResultSet() throws SQLException {
-        resultSet.updateString(1, nameField.getText());
-        resultSet.updateString(2, categoryField.getText());
-        resultSet.updateInt(3, Integer.parseInt(priceField.getText()));
+    private Product readFromFields() {
+        String name = nameField.getText();
+        String category = categoryField.getText();
+        int price = Integer.parseInt(priceField.getText());
+        byte[] image = imageBytes;
+
+        return new Product(name, category, price, image);
     }
 
     private void initSaveBtn() {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    updateResultSet();
-                    resultSet.updateRow();
-                } catch (SQLException e1) {
-                    JOptionPane.showMessageDialog(null, e1.getMessage(), "unable to save the element", JOptionPane.ERROR_MESSAGE);
-
-                }
+                productDb.updateCurrent(readFromFields());
             }
         });
     }
@@ -161,14 +147,8 @@ if(imageBytes != null){
         previousButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    if (!resultSet.isFirst() && !resultSet.isBeforeFirst()) {
-                        resultSet.previous();
-                        readFromResultSet();
-                    }
-                } catch (SQLException e1) {
-                    JOptionPane.showMessageDialog(null, e1.getMessage(), "unable to load previous element", JOptionPane.ERROR_MESSAGE);
-                }
+                Product product = productDb.getPrevious();
+                draw(product);
             }
         });
     }
@@ -177,9 +157,7 @@ if(imageBytes != null){
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                try {
-                    connection.close();
-                } catch (SQLException ignored) {}
+                productDb.close();
             }
         });
     }
@@ -188,26 +166,31 @@ if(imageBytes != null){
         nextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    if (!resultSet.isLast() && !resultSet.isAfterLast()) {
-                        resultSet.next();
-                        readFromResultSet();
-                    }
-                } catch (SQLException e1) {
-                    JOptionPane.showMessageDialog(null, e1.getMessage(), "unable to load next element", JOptionPane.ERROR_MESSAGE);
-                }
+                Product product = productDb.getNext();
+                draw(product);
             }
         });
     }
 
-    private void readFromResultSet() throws SQLException {
-        nameField.setText(resultSet.getString(1));
-        categoryField.setText(resultSet.getString(2));
-        priceField.setText(Integer.toString(resultSet.getInt(3)));
+    private void draw(Product product) {
+        if (product != null) {
+            nameField.setText(product.getName());
+            categoryField.setText(product.getCategory());
+            priceField.setText(Integer.toString(product.getPrice()));
+            imageBytes = product.getImage();
+            drawImage(product.getImage());
+        } else {
+            nameField.setText(null);
+            categoryField.setText(null);
+            priceField.setText(null);
+
+            drawImage(null);
+        }
     }
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
         DbNavigationForm form = new DbNavigationForm();
+
     }
 
 }
