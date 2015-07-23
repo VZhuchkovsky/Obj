@@ -1,7 +1,9 @@
 package com.hillel.com.hillel.java8;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -28,5 +30,16 @@ public class MainStream {
                 .collect(Collectors.toList());
 
         System.out.println(appleColors);
+
+       Optional<String> maxColor
+                = apples.parallelStream()
+                .filter(apple -> apple.getWeight() > 120)
+                .map(appleToString)
+                .limit(2)
+                .sorted()
+                .max(Comparator.naturalOrder());
+
+        System.out.println(maxColor.orElse("none"));
+
     }
 }
