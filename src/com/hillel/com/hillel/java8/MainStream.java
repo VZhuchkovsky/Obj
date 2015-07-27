@@ -74,6 +74,7 @@ public class MainStream {
     //book "Philosophy of Java" ("Thiking in Java")
     //book Robert ?Sedjvik? "Algoritmy i structury dannyh"
     //Study Frameworks
+    //?Concurency? in practice - mnogopotochnost'
     /**
      * @param val input value
      * @return always false
